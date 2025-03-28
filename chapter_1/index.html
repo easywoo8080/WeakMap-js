@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간단한 WeakMap</title>
+    <style>
+        #log {
+            font-family: Arial, sans-serif;
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, JavaScript!</h1>
+    <div id="log"></div>
+    <script>
+        const store = new WeakMap();
+        const logHistory = []; // WeakMap에 저장된 데이터를 추적하는 배열
+        const logDiv = document.getElementById('log'); // 로그를 표시할 div
+
+        class KeyManager {
+            constructor() {
+                this.keys = new Map();
+            }
+
+            getKey(name, desc = null) {
+                if (!this.keys.has(name)) {
+                    this.keys.set(name, Object.freeze({ key: name, description: desc }));
+                }
+                return this.keys.get(name);
+            }
+        }
+
+        // 인스턴스를 하나만 유지
+        const keyManager = new KeyManager();
+
+        let key = { key: 'id01', description: 'ID정보' };
+        let data_store = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        setInterval(() => {
+
+            
+            const data = data_store.map((item) => Math.floor(Math.random() * 100));
+            
+            key = { key: 'id01', description: 'ID정보' };
+            // WeakMap에 데이터 저장
+            store.set(key, data);
+            console.log(store)
+            // 로그 히스토리에 추가
+            logHistory.push({ key, data });
+
+            // 최신 데이터 div에 표시
+            logDiv.innerHTML = logHistory
+                .map((entry, index) => `${index + 1}: Key = ${entry.key.key}, Data = ${JSON.stringify(entry.data)}`)
+                .join('\n');
+        }, 1000);
+    </script>
+</body>
+</html>
