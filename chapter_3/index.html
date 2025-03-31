@@ -20,18 +20,17 @@
     <h1>Hello, JavaScript!</h1>
     <div id="log"></div>
     <script>
-        const store = new WeakMap();
+        let wm = new WeakMap();
+        let obj = {};
 
-        let key = { key: 'id01', description: 'ID정보' };   // 단일키를 유지해야됨( 이름이 같아도 안됨 객체 자체가 같아야 함)
-        let data_store = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        wm.set(obj, "data");
 
-        setInterval(() => {
-            const data = data_store.map((item) => Math.floor(Math.random() * 100));
-            // WeakMap에 데이터 저장
-            store.set(key, data);
-            console.log(store)
+        console.log(wm.has(obj)); // true (obj가 키로 존재함)
+        console.log(wm.has({}));  // false (새로운 객체는 기존 키와 다름)
 
-        }, 1000);
+        wm.delete(obj);
+        console.log(wm.has(obj)); // false (삭제됨)
+
     </script>
 </body>
 </html>
